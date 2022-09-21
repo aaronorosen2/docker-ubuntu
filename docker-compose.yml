@@ -1,0 +1,44 @@
+version: '3.5'
+
+services:
+ jinja:
+  build:
+    context: ./
+  image: vikingco/jinja2cli
+  volumes:
+    - jinja_data:/data
+
+ aaron_vnc:
+  shm_size: '350m'
+  image: $DOCKER_REPO:$DOCKER_TAG
+  depends_on: 
+    - "jinja"
+  build:
+    context: ./
+    dockerfile: ./Dockerfile
+  privileged: true
+  devices:
+    - "/dev/snd:/dev/snd"
+  environment:
+    - USER=$USER
+    - PASSWORD=$PASS
+    - ALSADEV=$ALSADEV
+    - SSL_PORT=443
+    - RELATIVE_URL_ROOT=approot
+    - OPENBOX_ARGS=$OPENBOX_ARGS
+  volumes:
+    - ToDo:/headless/Desktop/
+    - mozilla:/headless/.mozilla
+    - shm:/dev/shm
+    - source:/src:ro
+    - ssl:/etc/nginx/ssl
+  ports:
+    - "$CONTAINER_PORT_WEB:80"
+    - "$CONTAINER_PORT_SSL:443"
+volumes:
+  ToDo:
+  mozilla:
+  shm:
+  source:
+  ssl:
+  jinja_data:
