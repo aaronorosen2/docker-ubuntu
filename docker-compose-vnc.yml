@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+    k:
+        build: .
+        ports:
+            - 5900:5900
+        # volumes:
+        #    - /opt/vnc:/
+        environment:
+            PASSWORD: password
+            USERNAME: root
+            VNC_PASSWORD: password
+        networks:
+            - backend
+
+networks:
+    backend:
+        external:
+            name: chiroposture_network
+
